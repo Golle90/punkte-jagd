@@ -102,6 +102,18 @@ section[id],div[id].cta{scroll-margin-top:var(--head,110px)}
   background:var(--tint-2);color:var(--blue);font-size:15px;font-weight:500;text-decoration:none;white-space:nowrap}
 .jump a:hover{background:var(--tint-3)}
 
+/* ---------- Hinweisleiste "neue Zahlen" ---------- */
+.news{background:var(--accent);color:#fff}
+.news .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-block:12px}
+.news .msg{display:flex;align-items:center;gap:11px;flex:1;min-width:220px;font-size:16px;font-weight:700}
+.news .msg svg{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+.news .go{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:4px;
+  background:#fff;color:var(--accent);font-size:15px;font-weight:700;text-decoration:none}
+.news .x{min-height:44px;min-width:44px;border:0;background:transparent;color:#fff;font:inherit;font-size:22px;
+  line-height:1;cursor:pointer;border-radius:4px}
+.news .x:hover{background:rgba(0,0,0,.18)}
+
 /* ---------- Hero ---------- */
 .hero{position:relative;overflow:hidden;color:#fff;
   background:linear-gradient(118deg,var(--blue-deep) 0%,var(--blue-dark) 42%,var(--blue) 100%)}
@@ -444,6 +456,17 @@ footer .fine{margin-top:6px;padding-top:14px;border-top:1px solid rgba(255,255,2
     </nav>
   </div>
 </header>
+
+<div class="news" id="news" hidden role="status">
+  <div class="wrap">
+    <span class="msg">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6c0 3.5-1.2 5-2 6h16c-.8-1-2-2.5-2-6a6 6 0 0 0-6-6z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+      <span id="news-txt"></span>
+    </span>
+    <a class="go" href="#ranking">Ranking ansehen <span aria-hidden="true">&rarr;</span></a>
+    <button type="button" class="x" id="news-close" aria-label="Hinweis schließen">&times;</button>
+  </div>
+</div>
 
 <main>
 <section class="hero">
@@ -832,6 +855,19 @@ var CONFIG = {
   else if(frac >= .75){ stT.textContent='Über 75 % vergeben, jetzt noch Punkte sichern'; st.className='status hot'; }
   else if(frac >= .5){ stT.textContent='Die Hälfte ist geschafft'; }
   else if(frac >= .25){ stT.textContent='Ein Viertel ist vergeben'; }
+
+  /* ---- Hinweis, wenn seit dem letzten Besuch neue Zahlen da sind ---- */
+  var STAND_KEY = 'pj-stand';
+  if(CONFIG.asOf){
+    var seen = null;
+    try { seen = localStorage.getItem(STAND_KEY); } catch(e) {}
+    if(seen && seen !== CONFIG.asOf){
+      $('news-txt').textContent = 'Neue Zahlen seit deinem letzten Besuch: Stand ' + CONFIG.asOf;
+      $('news').hidden = false;
+    }
+    try { localStorage.setItem(STAND_KEY, CONFIG.asOf); } catch(e) {}
+  }
+  $('news-close').addEventListener('click', function(){ $('news').hidden = true; });
 
   /* ---- Ranking ---- */
   var fl = CONFIG.branches.map(function(b){
