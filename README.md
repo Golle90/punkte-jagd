@@ -1,4 +1,4 @@
-# WERTGARANTIE Punkte-Jagd (Becker + Flöge)
+# WERTGARANTIE Prämien-Jagd (Becker + Flöge)
 
 Statische Aktionsseite, eine einzige Datei: `index.html`. Kein Build nötig.
 Veröffentlicht über Vercel, jeder Commit auf `main` geht automatisch live.
